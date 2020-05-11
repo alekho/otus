@@ -91,6 +91,8 @@ Vagrant.configure("2") do |config|
 	      for i in $(seq 1 5); do mkfs.ext4 /dev/md0p$i; done
 	      mkdir -p /raid/part{1,2,3,4,5}
 	      for i in $(seq 1 5); do mount -v /dev/md0p$i /raid/part$i; done
+              for i in $(seq 1 5); do uuid_temp=$(sudo blkid | grep md0p$i | awk '{print $2}'); echo "$uuid_temp /raid/part$i ext4 defaults 0 0">> /etc/fstab; done
+
   	  SHELL
 
       end

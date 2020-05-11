@@ -23,3 +23,10 @@ box.vm.provision "shell", inline: <<-SHELL
 ```
 
 По сути здесь используются [скрипт](../make_raid.sh) который у нас получился по итогу первого задания.
+
+Но, при перезагрузки райд не монтируется в нужные нам папки, чтобы этого исправить необходимо поправить **fstab** следующим образом.
+
+```bash
+for i in $(seq 1 5); do uuid_temp=$(sudo blkid | grep md0p$i | awk '{print $2}'); echo "$uuid_temp /raid/part$i ext4 defaults 0 0">> /etc/fstab; done
+```
+
