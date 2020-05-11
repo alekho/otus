@@ -232,6 +232,14 @@ Information: You may need to update /etc/fstab.
 Создаем файловую систему и монтируем их по каталогам
 
 ```bash
+[root@alekhoVM ~]# for i in $(seq 1 5); do sudo mkfs.ext4 /dev/md0p$i; done 
+[root@alekhoVM ~]#mkdir -p /raid/part{1,2,3,4,5} 
+[root@alekhoVM ~]# for i in $(seq 1 5); do mount /dev/md0p$i /raid/part$i; done
+```
+
+
+
+```bash
 [root@alekhoVM ~]# fdisk -l
 
 Disk /dev/sda: 42.9 GB, 42949672960 bytes, 83886080 sectors
