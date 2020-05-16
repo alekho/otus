@@ -75,8 +75,7 @@
 Повторно обновляем **initrd**
 
 ```bash
-[root@lvm ~]# cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g;
-s/.img//g"` --force; done
+[root@lvm ~]# cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g; s/.img//g"` --force; done
 ```
 
 Пока не перезагружаемся и не выходим из под **chroot** - мы можем заодно перенести **/var**
