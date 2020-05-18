@@ -1,0 +1,117 @@
+# https://github.com/dotless-de/vagrant-vbguest/issues/367
+# https://github.com/dotless-de/vagrant-vbguest/pull/373
+home = ENV['HOME']
+ENV["LC_ALL"] = "en_US.UTF-8"
+MACHINES = {
+  :lvm => {
+        :box_name => "centos/8",
+        :box_url => "https://cloud.centos.org/centos/8/x86_64/images/CentOS-8-Vagrant-8.1.1911-20200113.3.x86_64.vagrant-virtualbox.box",
+        :ip_addr => '192.168.11.101',
+    :disks => {
+        :sata1 => {
+            :dfile => home + '/VirtualBox VMs/sata1.vdi',
+            :size => 10240,
+            :port => 1
+        },
+        :sata2 => {
+            :dfile => home + '/VirtualBox VMs/sata2.vdi',
+            :size => 2048, # Megabytes
+            :port => 2
+        },
+        :sata3 => {
+            :dfile => home + '/VirtualBox VMs/sata3.vdi',
+            :size => 1024, # Megabytes
+            :port => 3
+        },
+        :sata4 => {
+            :dfile => home + '/VirtualBox VMs/sata4.vdi',
+            :size => 1024,
+            :port => 4
+        }
+    }
+  },
+}
+
+if defined?(VagrantVbguest)
+  class MyWorkaroundInstallerUntilPR373IsMerged < VagrantVbguest::Installers::CentOS
+    protected
+    
+    def has_rel_repo?
+      unless instance_variable_defined?(:@has_rel_repo)
+        rel = release_version
+        @has_rel_repo = communicate.test(centos_8? ? 'yum repolist' : "yum repolist --enablerepo=C#{rel}-base --enablerepo=C#{rel}-updates")
+      end
+      @has_rel_repo
+    end
+
+    def centos_8?
+      release_version && release_version.to_s.start_with?('8')
+    end
+
+    def install_kernel_devel(opts=nil, &block)
+      if centos_8?
+        communicate.sudo('yum update -y kernel', opts, &block)
+        communicate.sudo('yum install -y kernel-devel', opts, &block)
+        communicate.sudo('shutdown -r now', opts, &block)
+
+        begin
+          sleep 10
+        end until @vm.communicate.ready?
+      else
+        rel = has_rel_repo? ? release_version : '*'
+        cmd = "yum install -y kernel-devel-`uname -r` --enablerepo=C#{rel}-base --enablerepo=C#{rel}-updates"
+        communicate.sudo(cmd, opts, &block)
+      end
+    end
+  end
+end
+
+Vagrant.configure('2') do |config|
+  config.vagrant.plugins = ['vagrant-vbguest']
+  config.vbguest.auto_update = true
+  #config.vm.box = 'centos/8'
+  #config.vm.box_url = 'https://cloud.centos.org/centos/8/x86_64/images/CentOS-8-Vagrant-8.1.1911-20200113.3.x86_64.vagrant-virtualbox.box'
+  
+  MACHINES.each do |boxname, boxconfig|
+  
+        config.vm.define boxname do |box|
+  
+            box.vm.box = boxconfig[:box_name]
+            box.vm.box = boxconfig[:box_url]
+            box.vm.host_name = boxname.to_s
+  
+            #box.vm.network "forwarded_port", guest: 3260, host: 3260+offset
+  
+            box.vm.network "private_network", ip: boxconfig[:ip_addr]
+  
+            box.vm.provider :virtualbox do |vb|
+                    vb.customize ["modifyvm", :id, "--memory", "256"]
+                    needsController = false
+            boxconfig[:disks].each do |dname, dconf|
+                unless File.exist?(dconf[:dfile])
+                  vb.customize ['createhd', '--filename', dconf[:dfile], '--variant', 'Fixed', '--size', dconf[:size]]
+                                  needsController =  true
+                            end
+  
+            end
+                    if needsController == true
+                       vb.customize ["storagectl", :id, "--name", "SATA", "--add", "sata" ]
+                       boxconfig[:disks].each do |dname, dconf|
+                           vb.customize ['storageattach', :id,  '--storagectl', 'SATA', '--port', dconf[:port], '--device', 0, '--type', 'hdd', '--medium', dconf[:dfile]]
+                       end
+                    end
+            end
+  
+        box.vm.provision "shell", inline: <<-SHELL
+            mkdir -p ~root/.ssh
+            cp ~vagrant/.ssh/auth* ~root/.ssh
+            yum install -y mdadm smartmontools hdparm gdisk
+          SHELL
+  
+        end
+  end
+
+  if defined?(MyWorkaroundInstallerUntilPR373IsMerged)
+    config.vbguest.installer = MyWorkaroundInstallerUntilPR373IsMerged
+  end
+end

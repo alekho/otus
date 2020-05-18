@@ -5,7 +5,7 @@
 Сначало необходимо установить **zfs**
 
 ```bash
-[root@lvm ~]# car /etc/redhat-release 
+[root@lvm ~]# cat /etc/redhat-release 
 CentOS Linux release 7.5.1804 (Core)
 [root@lvm ~]# yum install http://download.zfsonlinux.org/epel/zfs-release.el7_5.noarch.rpm
 [root@lvm ~]# gpg --quiet --with-fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
