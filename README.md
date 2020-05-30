@@ -11,3 +11,5 @@
 [Задание №5: NFS ](05_nfs_fuse)
 
 [Задание №6: Boot ](06_boot)
+
+[Задание №7: Systemd ](07_systemd)
