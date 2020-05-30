@@ -1,0 +1,10 @@
+[Unit]
+Description=Find Victoria service
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/sysconfig/watcher.conf
+ExecStart=/opt/watcher.sh $KEYWORD $FILE
+
+[Install]
+ WantedBy=multi-user.target
