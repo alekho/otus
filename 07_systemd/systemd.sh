@@ -30,6 +30,19 @@ grep \#OPTION  /etc/sysconfig/spawn-fcgi | cut -c 2- >> /etc/sysconfig/spawn-fcg
 #Копируем файл юнита
 cp /vagrant/spawn-fcgi/spawn-fcgi.service /etc/systemd/system
 
+#Включаем автозапуск сервиса и стартуем
 systemctl daemon-reload
 systemctl enable spawn-fcgi.service
 systemctl start spawn-fcgi.service
+
+#3 часть
+cp /usr/lib/systemd/system/httpd.service /etc/systemd/system/httpd@.service
+#Дальше cut уже не выручит, пришлось гуглить по sed, ибо не скриптовал
+#Экранируем, заменяем
+sed s/EnvironmentFile=\/etc\/sysconfig\/httpd/EnvironmentFile=\/etc\/sysconfig\/httpd-conf%I/ /etc/systemd/system/httpd@.service
+sed s/Description=The Apache HTTP Server/Description=Apache2 Multi Instance/ /etc/systemd/system/httpd@.service
+#Файлы конфигураций httpd
+mv /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd-inst-1.conf
+cp /etc/httpd/conf/httpd-inst-1.conf /etc/httpd/conf/httpd-inst-2.conf
+
+
