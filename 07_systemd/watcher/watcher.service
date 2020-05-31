@@ -3,6 +3,7 @@ Description=Find Victoria service
 
 [Service]
 Type=oneshot
+PIDFile=/var/run/watcher.pid
 EnvironmentFile=/etc/sysconfig/watcher.conf
 ExecStart=/opt/watcher.sh $KEYWORD $FILE
 
