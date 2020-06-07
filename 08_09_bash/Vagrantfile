@@ -1,28 +1,32 @@
 # -*- mode: ruby -*-
 # vim: set ft=ruby :
-home = ENV['HOME']
-ENV["LC_ALL"] = "en_US.UTF-8"
 
 MACHINES = {
-    :bashVM => {
-        :box_name => "ubuntu/bionic64",
-        :box_version => "20200525.0.0",
+  :bash => {
+        :box_name => "centos/7",
+        :ip_addr => '192.168.11.101',
         :path => 'bash.sh'
-    }, 
+  }
 }
 
 Vagrant.configure("2") do |config|
-    config.vm.box_version = "20200525.0.0"
-    MACHINES.each do |boxname, boxconfig|
-        config.vm.define boxname do |box|
-            box.vm.box = boxconfig[:box_name]
-            box.vm.host_name = boxname.to_s  
-            box.vm.network "public_network" 
-            box.vm.provider :virtualbox do |vb|
-                vb.customize ["modifyvm", :id, "--memory", "2048"]
-                needsController = false
-            end#box.vm.provider 
-            box.vm.provision "shell", path: boxconfig[:path]
-        end#config.vm.define
-    end#MACHINES
-end #Vagrant.config
+
+  MACHINES.each do |boxname, boxconfig|
+
+      config.vm.define boxname do |box|
+
+          box.vm.box = boxconfig[:box_name]
+          box.vm.host_name = boxname.to_s
+
+          #box.vm.network "forwarded_port", guest: 3260, host: 3260+offset
+
+          box.vm.network "private_network", ip: boxconfig[:ip_addr]
+
+          box.vm.provider :virtualbox do |vb|
+            vb.customize ["modifyvm", :id, "--memory", "256"]
+          end         
+          box.vm.provision  "shell", path: boxconfig[:path]
+      end
+  end
+end
+
