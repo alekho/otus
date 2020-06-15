@@ -70,7 +70,7 @@ sed -i 's/;chdir = \/var\/www/chdir = \/var\/www\/wordpress/' /etc/php/7.2/fpm/p
 systemctl reload php7.2-fpm.service
 
 touch /etc/nginx/sites-available/wordpress
-cat <<EOF > /etc/nginx/sites-available//wordpress
+cat <<EOF > /etc/nginx/sites-available/wordpress
 server {
   listen 8080 default_server;
 

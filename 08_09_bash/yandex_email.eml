@@ -1,0 +1,76 @@
+Received: from mxback10q.mail.yandex.net (localhost [127.0.0.1])
+	by mxback10q.mail.yandex.net with LMTP id wfFIyO17gC-XnCP8tMn
+	for <mailf0rtest@yandex.ru>; Mon, 15 Jun 2020 10:13:33 +0300
+Received: from mxback10q.mail.yandex.net (localhost [127.0.0.1])
+	by mxback10q.mail.yandex.net (Yandex) with ESMTP id B2C70EBE0E9E
+	for <mailf0rtest@yandex.ru>; Mon, 15 Jun 2020 10:13:33 +0300 (MSK)
+X-Yandex-Internal: 1
+Received: from vla1-ee05250d997a.qloud-c.yandex.net (vla1-ee05250d997a.qloud-c.yandex.net [2a02:6b8:c0d:3495:0:640:ee05:250d])
+	by mxback10q.mail.yandex.net (mxback/Yandex) with ESMTP id GGOubjL7Ym-DXTefdvM;
+	Mon, 15 Jun 2020 10:13:33 +0300
+X-Yandex-Front: mxback10q.mail.yandex.net
+X-Yandex-TimeMark: 1592205213.688
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1592205213;
+	bh=NEi2rCqhlNvaDPemmR7KNV5KEdVxrUrzUMHNwHSDL08=;
+	h=Subject:To:Date:From:Message-Id;
+	b=DPZgr/ApN7Pg6dUXLwovDvhPWZBQ21wDou3edyzNsjWWlzP+06FjaTNHoI8wS22uB
+	 QbXoMuYjSuk6KKVuHDjgGmdrgWxQ21zshBFFVU7E8P884Gv+Eykgdm3E38nFHtYnD8
+	 90D3r6IopSg8V1gNF/DV/Z85sktk80UhcObtkUMo=
+Authentication-Results: mxback10q.mail.yandex.net; dkim=pass header.i=@yandex.ru
+Received: by vla1-ee05250d997a.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id LLmqG8D2Xg-DXWq1tRC;
+	Mon, 15 Jun 2020 10:13:33 +0300
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(Client certificate not present)
+X-Yandex-TimeMark: 1592205213.305
+Message-Id: <20200615101333.DXWq1tRC@vla1-ee05250d997a.qloud-c.yandex.net>
+X-Yandex-Suid-Status: 1 1481876438
+X-Yandex-Spam: 1
+From: mailf0rtest@yandex.ru
+Date: Mon, 15 Jun 2020 07:13:32 +0000
+To: otus
+Subject: =?utf-8?B?0JDQm9Cv0K/Qr9Cv0KDQnNCQISEh?=
+User-Agent: Heirloom mailx 12.5 7/5/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Return-Path: mailf0rtest@yandex.ru
+
+#####################  НАЧАЛО  ####################
+#  Начальное время  14/Aug/2019:04:12:10
+###################################################
+#  Конечное время  15/Aug/2019:00:25:46
+###################################################
+#  5 IP адресов с максимальным количеством запросов
+     45 93.158.167.130
+     39 109.236.252.130
+     37 212.57.117.19
+     33 188.43.241.106
+     31 87.250.233.68
+###################################################
+#  5 самых частых запросов
+    157 /
+    120 /wp-login.php
+     57 /xmlrpc.php
+     26 /robots.txt
+     12 /favicon.ico
+###################################################
+#   Все ошибки 
+     51 404
+      7 400
+      3 500
+      2 499
+      1 405
+      1 403
+###################################################
+#   Все статусы запросов 
+    498 200
+     95 301
+     51 404
+     11 "-"
+      7 400
+      3 500
+      2 499
+      1 405
+      1 403
+      1 304
+#####################  КОНЕЦ!  ####################

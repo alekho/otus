@@ -1,0 +1,10 @@
+[Unit]
+Description=Load nginx log parser service every 30 second
+
+[Timer]
+OnUnitActiveSec=300
+AccuracySec=1us
+Unit=parser.service
+
+[Install]
+WantedBy=multi-user.target

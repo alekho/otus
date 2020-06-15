@@ -13,3 +13,8 @@
 [Задание №6: Boot ](06_boot)
 
 [Задание №7: Systemd ](07_systemd)
+
+[Задание №8-9: Bash, grep, awk, sed ](08_09_bash)
+
+[Задание №10: Packages](10_packages)
+
