@@ -1,0 +1,16 @@
+all:
+  children:
+    web:
+  vars:
+
+web:
+  hosts:
+    nginx01:
+      ansible_host: 127.0.0.1 
+      ansible_port: 2222  
+      ansible_private_key_file: .vagrant/machines/nginx01/virtualbox/private_key
+
+    nginx02:
+      ansible_host: 127.0.0.1 
+      ansible_port: 2200  
+      ansible_private_key_file: .vagrant/machines/nginx02/virtualbox/private_key
