@@ -1,0 +1,10 @@
+---
+- name: "Install NGINX server"
+  hosts: web
+  become: true
+  vars:
+    nginx_repo_name: epel-release
+    nginx_listen_port: 8080
+  
+  roles:
+    - nginx
