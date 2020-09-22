@@ -25,3 +25,5 @@
 [Задание №13: Namespaces_cgroups](13_namespaces_cgroups)
 
 [Задание №14-15: Ansible](14_ansible)
+
+[Задание №16: PAM и AAA](14_pam_aaa)
