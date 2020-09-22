@@ -26,4 +26,4 @@
 
 [Задание №14-15: Ansible](14_ansible)
 
-[Задание №16: PAM и AAA](14_pam_aaa)
+[Задание №16: PAM и AAA](16_pam_aaa)
