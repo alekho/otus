@@ -20,8 +20,8 @@
 
 [Задание №11: Processes](11_processes)
 
-[Задание №12: Processes](12_memory)
+[Задание №12: Memory](12_memory)
 
-[Задание №13: Processes](13_namespaces_cgroups)
+[Задание №13: Namespaces_cgroups](13_namespaces_cgroups)
 
 [Задание №14-15: Ansible](14_ansible)
