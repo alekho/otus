@@ -1,7 +1,5 @@
 FROM centos:centos7
 
-MAINTAINER alekho
-
 WORKDIR /root
 
 RUN yum install rpmdevtools rpm-build tree yum-utils  wget gcc make  -y -q
