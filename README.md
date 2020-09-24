@@ -32,7 +32,7 @@
 
 [Задание №18-19: Docker](18_19_docker) :clock4:
 
-[Задание №20: Мониторинг производительности](20_monitor) :clock4:
+[Задание №20: Мониторинг производительности](20_monitor) :heavy_check_mark:
 
 [Задание №21: Мониторинг и алертинг ](21_alert) :clock4:
 
@@ -44,7 +44,7 @@
 
 [Задание №26: DHCP, PXE ](26_dhcp_pxe) :clock4:
 
-[Задание №27: IPv6](27_ipv6) :clock4:
+[Задание №27: IPv6](27_ipv6) :heavy_check_mark:
 
 [Задание №28: Фильтрация трафика - firewalld, iptables ](28_firewalld_iptables) :clock4:
 
@@ -56,7 +56,7 @@
 
 [Задание №32: LDAP. Централизованная авторизация и аутентификация ](32_ldap) :clock4:
 
-[Задание №33: BGP](33_bgp) :clock4:
+[Задание №33: BGP](33_bgp) :heavy_check_mark:
 
 [Задание №34: Сетевые пакеты. VLAN'ы. LACP](34_vlan_lacp) :clock4:
 
