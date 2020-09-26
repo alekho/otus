@@ -42,3 +42,36 @@ return polkit.Result.YES;
 });
 EOF
 ```
+Решение с **pam_time.so** действительно работает только с одельными пользователями, а не группами. Поэтому используем модуль **pam_exec.so**. Написан скрипт, который возвращает **0** если все удовлетворяет нашим условиям, и соответственно **1**, если это пользователь не может логироваться в выходные.
+```bash
+#!/bin/bash
+if getent group adm_group | grep &>/dev/null $PAM_USER; then
+
+    exit 0;
+fi
+
+if [ $(date +%u) -gt 5 ];then
+
+  exit 1;
+
+else
+
+   exit 0;
+
+fi
+```
+Кстати, пришлось копировать уже написанный скрипт, потому как иначе Vagrant криво собирал, и терялась часть скрипта.
+
+
+Что касается части со *
+```bash
+polkit.addRule(function(action, subject) {
+if (action.id.match("org.freedesktop.systemd1.manage-units") &&
+action.lookup("unit") == "docker.service")  &&
+subject.user === "user2") {
+return polkit.Result.YES;
+}
+});
+```
+
+но этот способ работает только с верии  systend v226, тоесть только в Centos8, к сожалению, совсем нет времени искать решение для7

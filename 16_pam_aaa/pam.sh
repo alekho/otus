@@ -15,8 +15,27 @@ usermod -a -G adm_group user1
 usermod -a -G adm_group root
 usermod -a -G adm_group vagrant
 
-sed -i '8i\account required pam_time.so' /etc/pam.d/sshd
-sed -i '62a\*;*;!adm_group;Wd' /etc/security/time.conf
+sed -i '8i\account    required     pam_exec.so /usr/local/bin/test_login.sh' /etc/pam.d/sshd
+
+cp /vagrant/test_login.sh  /usr/local/bin
+chmod 544 /usr/local/bin/test_login.sh
+
+#cat >>/usr/local/bin/test_login.sh <<EOF; chmod 777 /usr/local/bin/test_login.sh
+#!/bin/bash
+#
+#if getent group adm_group | grep &>/dev/null $PAM_USER; then
+
+#    exit 0;
+#fi
+
+#if [ $(date +%u) -gt 5 ];then
+#  exit 1;
+#else
+#  exit 0;
+#fi
+#EOF
+
+
 
 yum install -y yum-utils
 yum-config-manager \
