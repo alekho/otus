@@ -9,6 +9,7 @@ docker run -d -p 80:80 alekho/hw18-nginx:0.2
 
 Во второй части с помощью **docker-compose** соединим nginx и php.
 У нас добавляется образ **PHP** [alekho/hw18-php:0.2](https://hub.docker.com/repository/docker/alekho/hw18-php).
+Стартовая страничка отдает **php info**
 ```yml
 version: "3.7"
 
