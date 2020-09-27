@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+  nginx:
+    image: alekho/hw18-nginx:0.2
+    volumes:
+      - ./www/default.conf:/etc/nginx/conf.d/default.conf
+      - ./www/index.php:/usr/share/nginx/html/index.php
+    ports:
+      - "80:80"
+    networks:
+      - web
+    depends_on:
+      - php
+  php:
+    image: alekho/hw18-php:0.2
+    volumes:
+        - ./www/index.php:/usr/share/nginx/html/index.php
+    networks:
+      - web
+networks:
+  web:
