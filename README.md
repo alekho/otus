@@ -30,11 +30,11 @@
 
 [Задание №17: Selinux](17_selinux) :clock4:
 
-[Задание №18-19: Docker](18_19_docker) :clock4:
+[Задание №18-19: Docker](18_19_docker) :heavy_check_mark:
 
 [Задание №20: Мониторинг производительности](20_monitor) :heavy_check_mark:
 
-[Задание №21: Мониторинг и алертинг ](21_alert) :clock4:
+[Задание №21: Мониторинг и алертинг ](21_alert) :heavy_check_mark:
 
 [Задание №22-23: Сбор и анализ логов](22_23_logs) :clock4:
 
