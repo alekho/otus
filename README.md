@@ -28,7 +28,7 @@
 
 [Задание №16: PAM и AAA](16_pam_aaa) :heavy_check_mark:
 
-[Задание №17: Selinux](17_selinux) :clock4:
+[Задание №17: Selinux](17_selinux) :heavy_check_mark:
 
 [Задание №18-19: Docker](18_19_docker) :heavy_check_mark:
 

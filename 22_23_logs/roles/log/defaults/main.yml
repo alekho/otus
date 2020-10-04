@@ -1,0 +1,4 @@
+---
+# defaults file for log
+repo_name: 
+  - epel-release

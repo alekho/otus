@@ -1,0 +1,8 @@
+---
+# tasks file for elk
+- name: "Install {{ repo_name }} repo"
+  yum:
+    name: "{{ repo_name }}"
+    state: present
+  tags:
+    - repo

@@ -1,0 +1,15 @@
+--- 
+  - hosts: web
+    become: true  
+    roles:
+    - web
+    
+  - hosts: log
+    become: true
+    roles:
+    - log
+
+  - hosts: elk
+    become: true      
+    roles:
+    - elk

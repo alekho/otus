@@ -1,0 +1,6 @@
+---
+# tasks file for web
+- include_tasks: repo.yml
+- include_tasks: nginx.yml
+- include_tasks: journald.yml
+- include_tasks: elk.yml
