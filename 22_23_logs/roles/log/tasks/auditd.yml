@@ -1,0 +1,7 @@
+---
+- name: 'Enable auditd port' 
+  replace:
+    path: /etc/audit/auditd.conf
+    regexp: '^##tcp_listen_port = 60'
+    replace: "tcp_listen_port = 60"
+  notify: restart_auditd

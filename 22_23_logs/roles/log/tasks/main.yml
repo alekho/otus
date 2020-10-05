@@ -1,8 +1,6 @@
 ---
 # tasks file for log
-- name: "Install {{ repo_name }} repo"
-  yum:
-    name: "{{ repo_name }}"
-    state: present
-  tags:
-    - repo
+- include_tasks: repo.yml
+- include_tasks: journald.yml
+- include_tasks: auditd.yml
+#- include_tasks: elk.yml

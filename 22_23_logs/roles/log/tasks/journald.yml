@@ -1,0 +1,98 @@
+---
+- name: 'Install systemd-journal-gateway' 
+  yum:
+    name: systemd-journal-gateway
+    state: present
+  tags:
+  - jgtw
+
+- name: 'Modify journald.conf'
+  replace:
+    path: /etc/systemd/journald.conf
+    regexp: '^#Storage=auto'
+    replace: "Storage=persistent"
+  tags:
+    - jconf
+
+- name: 'Creates remote log directory'
+  file:
+    path: /var/log/journal/remote
+    state: directory
+    owner: systemd-journal-remote
+    group: systemd-journal-remote
+  tags:
+  - remote-directory
+
+- name: 'Copy service unit'
+  copy:
+    src: /lib/systemd/system/systemd-journal-remote.service
+    dest: /etc/systemd/system/
+    remote_src: yes
+  tags:
+    - copy-unit
+      
+  
+- name: 'Disable https'
+  replace:
+    path: /etc/systemd/system/systemd-journal-remote.service
+    regexp: 'listen-https'
+    replace: "listen-http"
+  tags:
+    - http
+  
+- name: 'Change WatchdogSec'
+  replace:
+    path: /etc/systemd/system/systemd-journal-remote.service
+    regexp: '^WatchdogSec=10min'
+    replace: "WatchdogSec=30"
+  tags:
+    - watchdog
+
+# Фикс бага с зависимостями сокета systemd-journal-remote.service
+- name: 'Copy systemd-journal-remote.socket'
+  copy:
+    src: /lib/systemd/system/systemd-journal-remote.socket
+    dest: /etc/systemd/system/
+    remote_src: yes
+
+- name: 'Add PartOf'
+  lineinfile:
+    path: /etc/systemd/system/systemd-journal-remote.socket
+    line: 'PartOf=systemd-journal-remote.service'
+    state: present
+    insertbefore: "^Description=Journal Remote Sink Socket*"
+
+- name: 'Restart journald'
+  systemd:
+    enabled: true
+    daemon_reload: yes
+    name: systemd-journald
+    state: restarted
+
+- name: 'Enable systemd-journal-remote'
+  systemd:
+    enabled: true
+    daemon_reload: yes
+    name: systemd-journal-remote
+    state: restarted
+
+- name: configure rsyslog listening
+  lineinfile:
+    path: /etc/rsyslog.conf
+    regexp: '^#({{ item.regexp }}.*)'
+    line: '\1'
+    backrefs: yes
+  loop:
+  - { regexp: '\$ModLoad imudp' }
+  - { regexp: '\$UDPServerRun 514' }
+  notify: restart rsyslog
+    
+- name: configure rsyslog template
+  blockinfile:
+    path: /etc/rsyslog.conf
+    content: |
+      $template RemoteLogs,"/var/log/%HOSTNAME%/%PROGRAMNAME%.log"
+      *.* ?RemoteLogs
+      & stop
+      insertafter: '$UDPServerRun 514'
+  notify: restart rsyslog

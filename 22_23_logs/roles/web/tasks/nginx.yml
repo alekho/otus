@@ -6,3 +6,29 @@
     - restart nginx
   tags:
     - nginx
+
+- name: 'Configure nginx to send access logs to remote server'
+  lineinfile:
+    path: /etc/nginx/nginx.conf
+    state: present
+    regexp: 'access_log  /var/log/nginx/access.log  main;'
+    line: 'access_log      syslog:server=192.168.100.11:514,facility=local7,tag=nginx,severity=info main;'
+    backrefs: yes
+  notify: restart nginx
+  
+- name: 'Configure nginx to store locally only crit logs'
+  lineinfile:
+    path: /etc/nginx/nginx.conf
+    state: present
+    regexp: '(error_log /var/log/nginx/error.log);'
+    line: '\1 crit;'
+    backrefs: yes
+  notify: restart nginx
+  
+- name: 'Configure nginx to send errors to remote server'
+  lineinfile:
+    path: /etc/nginx/nginx.conf
+    state: present
+    insertafter: '^error_log.*'
+    line: 'error_log syslog:server=192.168.100.11:514,facility=local7,tag=nginx,severity=error;'
+  notify: restart nginx

@@ -1,2 +1,9 @@
 ---
 # handlers file for log
+- name: restart_auditd
+  command: service auditd condrestart
+  
+- name: "restart rsyslog"
+  systemd:
+    name: "rsyslog"
+    state: "restarted"

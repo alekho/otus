@@ -1,0 +1,35 @@
+---
+- name: 'Install audispd-plugins'
+  yum:
+    name: audispd-plugins
+    state: present
+    
+- name: 'Configuring au-remote.conf' 
+  replace:
+    path: /etc/audisp/plugins.d/au-remote.conf
+    regexp: 'active = no'
+    replace: "active = yes"
+    
+- name: 'Configuring audisp-remote.conf' 
+  replace:
+    path: /etc/audisp/audisp-remote.conf
+    regexp: '^remote_server = *$'
+    replace: "remote_server = 192.168.100.11"
+    
+- name: 'Configuring auditd.conf' 
+  replace:
+    path: /etc/audit/auditd.conf
+    regexp: 'write_logs = yes'
+    replace: "write_logs = no"
+    
+- name: 'Create nginx.rules' 
+  file:
+    path: /etc/audit/rules.d/nginx.rules
+    state: touch
+    
+- name: 'Insert rule nginx.rules' 
+  lineinfile:
+    path: /etc/audit/rules.d/nginx.rules
+    line: '-w /etc/nginx/ -p wa -k ngnix-config-modified'
+    state: present
+  notify: restart_auditd
