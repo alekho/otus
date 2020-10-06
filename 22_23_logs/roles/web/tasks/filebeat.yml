@@ -1,28 +1,17 @@
 ---
-# tasks file for elk
-- name: "Install {{ repo_name }} repo"
-  yum:
-    name: "{{ repo_name }}"
-    state: present
-  tags:
-    - repo
-
 - name: 'GPG key'
   rpm_key:
     state: present
     key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
-
+  
 - name: 'Repo ELK'
   copy:
     src: elasticsearch.repo
     dest: /etc/yum.repos.d/elasticsearch.repo
-
+  
 - name: elk packages install
   yum:
     update_cache: yes
     name:
-    - java-1.8.0-openjdk
-    - elasticsearch
-    - kibana
-    - logstash
+    - filebeat
     state: present

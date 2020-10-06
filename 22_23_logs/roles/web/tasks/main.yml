@@ -4,4 +4,4 @@
 - include_tasks: nginx.yml
 - include_tasks: journald.yml
 - include_tasks: auditd.yml
-- include_tasks: elk.yml
+- include_tasks: filebeat.yml
