@@ -63,4 +63,11 @@ Chunk index:                    1294                 3404
 Keeping archive: etc-borgcl-2020-10-08_08:12:00       Thu, 2020-10-08 08:12:01 [c4a295571d2bec42d1bf5b80c7d9ae3ac372ccb6478e25275e6e24f18c0c6ee3]
 Pruning archive: etc-borgcl-2020-10-08_08:06:00       Thu, 2020-10-08 08:06:02 [6af4053417791d6be1fab1cd70e9c76501d2c6f4e59a3ab002ea11415cfa665b] (1/1)
 ```
-
+Просмотреть бэкапы можно:
+```bash
+[root@borgcl ~]# borg list root@192.168.100.10:/var/backup/
+```
+Восстановаить бэкапы можно:
+```bash
+[root@borgcl ~]#  borg extract root@192.168.100.10:/var/backup/::etc-borgcl-2020-10-08_08:12:00
+```
