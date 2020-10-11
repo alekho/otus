@@ -1,5 +1,8 @@
 # Network
 
+
+![lab](img/network-lab.png)
+
 Посчитаем те сети которые даны:
 
 **office1:**
