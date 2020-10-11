@@ -1,62 +1,4 @@
-# otus-linux
-Vagrantfile - для стенда урока 9 - Network
-
-# Дано
-Vagrantfile с начальным  построением сети
-inetRouter
-centralRouter
-centralServer
-
-тестировалось на virtualbox
-
-# Планируемая архитектура
-построить следующую архитектуру
-
-Сеть office1
-- 192.168.2.0/26      - dev
-- 192.168.2.64/26    - test servers
-- 192.168.2.128/26  - managers
-- 192.168.2.192/26  - office hardware
-
-Сеть office2
-- 192.168.1.0/25      - dev
-- 192.168.1.128/26  - test servers
-- 192.168.1.192/26  - office hardware
-
-
-Сеть central
-- 192.168.0.0/28    - directors
-- 192.168.0.32/28  - office hardware
-- 192.168.0.64/26  - wifi
-
-```
-Office1 ---\
-      -----> Central --IRouter --> internet
-Office2----/
-```
-Итого должны получится следующие сервера
-- inetRouter
-- centralRouter
-- office1Router
-- office2Router
-- centralServer
-- office1Server
-- office2Server
-
-# Теоретическая часть
-- Найти свободные подсети
-- Посчитать сколько узлов в каждой подсети, включая свободные
-- Указать broadcast адрес для каждой подсети
-- проверить нет ли ошибок при разбиении
-
-# Практическая часть
-- Соединить офисы в сеть согласно схеме и настроить роутинг
-- Все сервера и роутеры должны ходить в инет черз inetRouter
-- Все сервера должны видеть друг друга
-- у всех новых серверов отключить дефолт на нат (eth0), который вагрант поднимает для связи
-- при нехватке сетевых интервейсов добавить по несколько адресов на интерфейс
-
-## Выполнение
+# Network
 
 Посчитаем те сети которые даны:
 
@@ -177,3 +119,100 @@ HostMax:   192.168.0.126        11000000.10101000.00000000.01 111110
 Broadcast: 192.168.0.127        11000000.10101000.00000000.01 111111
 Hosts/Net: 62                    Class C, Private Internet
 ```
+Свободные подсети есть только на центральном роутере:
+```bash
+alekho@ubuntu2004:~/OTUS/25_network$ ipcalc 192.168.0.16/28
+Address:   192.168.0.16         11000000.10101000.00000000.0001 0000
+Netmask:   255.255.255.240 = 28 11111111.11111111.11111111.1111 0000
+Wildcard:  0.0.0.15             00000000.00000000.00000000.0000 1111
+=>
+Network:   192.168.0.16/28      11000000.10101000.00000000.0001 0000
+HostMin:   192.168.0.17         11000000.10101000.00000000.0001 0001
+HostMax:   192.168.0.30         11000000.10101000.00000000.0001 1110
+Broadcast: 192.168.0.31         11000000.10101000.00000000.0001 1111
+Hosts/Net: 14                    Class C, Private Internet
+
+alekho@ubuntu2004:~/OTUS/25_network$ ipcalc 192.168.0.48/28
+Address:   192.168.0.48         11000000.10101000.00000000.0011 0000
+Netmask:   255.255.255.240 = 28 11111111.11111111.11111111.1111 0000
+Wildcard:  0.0.0.15             00000000.00000000.00000000.0000 1111
+=>
+Network:   192.168.0.48/28      11000000.10101000.00000000.0011 0000
+HostMin:   192.168.0.49         11000000.10101000.00000000.0011 0001
+HostMax:   192.168.0.62         11000000.10101000.00000000.0011 1110
+Broadcast: 192.168.0.63         11000000.10101000.00000000.0011 1111
+Hosts/Net: 14                    Class C, Private Internet
+
+alekho@ubuntu2004:~/OTUS/25_network$ ipcalc 192.168.0.128/25
+Address:   192.168.0.128        11000000.10101000.00000000.1 0000000
+Netmask:   255.255.255.128 = 25 11111111.11111111.11111111.1 0000000
+Wildcard:  0.0.0.127            00000000.00000000.00000000.0 1111111
+=>
+Network:   192.168.0.128/25     11000000.10101000.00000000.1 0000000
+HostMin:   192.168.0.129        11000000.10101000.00000000.1 0000001
+HostMax:   192.168.0.254        11000000.10101000.00000000.1 1111110
+Broadcast: 192.168.0.255        11000000.10101000.00000000.1 1111111
+Hosts/Net: 126                   Class C, Private Internet
+```
+На других роутерах свободных подсетей нет.
+
+Ошибок при разбиении нет.
+
+### Проверка доступности интернета и трассировки через **inetRouter**:
+```bash
+[vagrant@office1Server ~]$ ping ya.ru
+PING ya.ru (87.250.250.242) 56(84) bytes of data.
+64 bytes from ya.ru (87.250.250.242): icmp_seq=1 ttl=57 time=20.2 ms
+64 bytes from ya.ru (87.250.250.242): icmp_seq=2 ttl=57 time=23.5 ms
+64 bytes from ya.ru (87.250.250.242): icmp_seq=3 ttl=57 time=26.3 ms
+^C
+--- ya.ru ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2001ms
+rtt min/avg/max/mdev = 20.253/23.384/26.343/2.492 ms
+[vagrant@office1Server ~]$ tracepath -n ya.ru
+ 1?: [LOCALHOST]                                         pmtu 1500
+ 1:  192.168.2.65                                          0.723ms 
+ 1:  192.168.2.65                                          0.800ms 
+ 2:  192.168.200.2                                         1.090ms 
+ 3:  192.168.255.1                                         1.473ms 
+ 4:  no reply
+^C
+```
+
+```bash
+[vagrant@office2Server ~]$ ping ya.ru
+PING ya.ru (87.250.250.242) 56(84) bytes of data.
+64 bytes from ya.ru (87.250.250.242): icmp_seq=1 ttl=57 time=21.4 ms
+64 bytes from ya.ru (87.250.250.242): icmp_seq=2 ttl=57 time=20.2 ms
+64 bytes from ya.ru (87.250.250.242): icmp_seq=3 ttl=57 time=20.3 ms
+^C
+--- ya.ru ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2004ms
+rtt min/avg/max/mdev = 20.297/20.690/21.445/0.558 ms
+[vagrant@office2Server ~]$ tracepath -n ya.ru
+ 1?: [LOCALHOST]                                         pmtu 1500
+ 1:  192.168.1.129                                         0.513ms 
+ 1:  192.168.1.129                                         0.310ms 
+ 2:  192.168.100.2                                         0.586ms 
+ 3:  192.168.255.1                                         0.874ms 
+^C
+```
+
+```bash
+[vagrant@centralServer ~]$ ping ya.ru
+PING ya.ru (87.250.250.242) 56(84) bytes of data.
+64 bytes from ya.ru (87.250.250.242): icmp_seq=1 ttl=59 time=20.2 ms
+64 bytes from ya.ru (87.250.250.242): icmp_seq=2 ttl=59 time=20.4 ms
+64 bytes from ya.ru (87.250.250.242): icmp_seq=3 ttl=59 time=24.6 ms
+^C
+--- ya.ru ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2004ms
+rtt min/avg/max/mdev = 20.227/21.785/24.660/2.038 ms
+[vagrant@centralServer ~]$ tracepath -n  ya.ru
+ 1?: [LOCALHOST]                                         pmtu 1500
+ 1:  192.168.0.1                                           0.645ms 
+ 1:  192.168.0.1                                           0.620ms 
+ 2:  192.168.255.1                                         0.983ms 
+ 3:  no reply
+ ^C
+ ```
