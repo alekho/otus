@@ -40,9 +40,9 @@
 
 [Задание №24: Резервное копирование ](24_backup) :heavy_check_mark:
 
-[Задание №25: Архитектура сетей ](25_network) :clock4:
+[Задание №25: Архитектура сетей ](25_network) :heavy_check_mark:
 
-[Задание №26: DHCP, PXE ](26_dhcp_pxe) :clock4:
+[Задание №26: DHCP, PXE ](26_dhcp_pxe) :heavy_check_mark:
 
 [Задание №27: IPv6](27_ipv6) :heavy_check_mark:
 
