@@ -46,7 +46,7 @@
 
 [Задание №27: IPv6](27_ipv6) :heavy_check_mark:
 
-[Задание №28: Фильтрация трафика - firewalld, iptables ](28_firewalld_iptables) :clock4:
+[Задание №28: Фильтрация трафика - firewalld, iptables ](28_firewalld_iptables) :heavy_check_mark:
 
 [Задание №29: Статическая и динамическая маршрутизация, OSPF ](29_ospf) :clock4:
 
