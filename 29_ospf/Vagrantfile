@@ -1,0 +1,117 @@
+# -*- mode: ruby -*-
+# vim: set ft=ruby :
+
+MACHINES = {
+  :router1 => {
+        :box_name => "centos/8",
+        :box_url => "https://cloud.centos.org/centos/8/x86_64/images/CentOS-8-Vagrant-8.2.2004-20200611.2.x86_64.vagrant-virtualbox.box",
+        :net => [
+                   {ip: '10.0.0.1', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "link1-2"},
+                   {ip: '10.10.0.1', adapter: 3, netmask: "255.255.255.252", virtualbox__intnet: "link1-3"},
+                ]
+  },
+  :router2 => {
+        :box_name => "centos/8",
+        :box_url => "https://cloud.centos.org/centos/8/x86_64/images/CentOS-8-Vagrant-8.2.2004-20200611.2.x86_64.vagrant-virtualbox.box",
+        :net => [
+                   {ip: '10.0.0.2', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "link1-2"},
+                   {ip: '10.20.0.2', adapter: 3, netmask: "255.255.255.252", virtualbox__intnet: "link2-3"},
+                ]
+  },
+  :router3 => {
+        :box_name => "centos/8",
+        :box_url => "https://cloud.centos.org/centos/8/x86_64/images/CentOS-8-Vagrant-8.2.2004-20200611.2.x86_64.vagrant-virtualbox.box",
+        :net => [
+                   {ip: '10.10.0.2', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "link1-3"},
+                   {ip: '10.20.0.1', adapter: 3, netmask: "255.255.255.252", virtualbox__intnet: "link2-3"},
+                ]
+  },
+  
+}
+
+if defined?(VagrantVbguest)
+  class MyWorkaroundInstallerUntilPR373IsMerged < VagrantVbguest::Installers::CentOS
+    protected
+    
+    def has_rel_repo?
+      unless instance_variable_defined?(:@has_rel_repo)
+        rel = release_version
+        @has_rel_repo = communicate.test(centos_8? ? 'yum repolist' : "yum repolist --enablerepo=C#{rel}-base --enablerepo=C#{rel}-updates")
+      end
+      @has_rel_repo
+    end
+
+    def centos_8?
+      release_version && release_version.to_s.start_with?('8')
+    end
+
+    def install_kernel_devel(opts=nil, &block)
+      if centos_8?
+        communicate.sudo('yum update -y kernel', opts, &block)
+        communicate.sudo('yum install -y kernel-devel', opts, &block)
+        communicate.sudo('shutdown -r now', opts, &block)
+
+        begin
+          sleep 10
+        end until @vm.communicate.ready?
+      else
+        rel = has_rel_repo? ? release_version : '*'
+        cmd = "yum install -y kernel-devel-`uname -r` --enablerepo=C#{rel}-base --enablerepo=C#{rel}-updates"
+        communicate.sudo(cmd, opts, &block)
+      end
+    end
+  end
+end
+
+Vagrant.configure("2") do |config|
+  config.vagrant.plugins = ['vagrant-vbguest']
+  config.vbguest.auto_update = true
+
+  MACHINES.each do |boxname, boxconfig|
+
+    config.vm.define boxname do |box|
+
+        box.vm.box = boxconfig[:box_name]
+        box.vm.host_name = boxname.to_s
+
+        boxconfig[:net].each do |ipconf|
+          box.vm.network "private_network", ipconf
+        end
+        
+        box.vm.provider :virtualbox do |vb|
+          vb.customize ["modifyvm", :id, "--memory", "256"]
+          vb.customize ["modifyvm", :id, "--cpus", "1"]
+          vb.name = boxname.to_s
+        end
+
+        box.vm.provision "shell", inline: <<-SHELL
+          mkdir -p ~root/.ssh
+                cp ~vagrant/.ssh/auth* ~root/.ssh
+        SHELL
+        
+        case boxname.to_s
+        when "router1"
+          box.vm.provision "shell", run: "always", inline: <<-SHELL
+            sysctl net.ipv4.conf.all.forwarding=1
+
+            SHELL
+        when "router2"
+          box.vm.provision "shell", run: "always", inline: <<-SHELL
+            sysctl net.ipv4.conf.all.forwarding=1
+
+            SHELL
+        when "router3"
+          box.vm.provision "shell", run: "always", inline: <<-SHELL
+            sysctl net.ipv4.conf.all.forwarding=1
+
+            SHELL
+        end
+
+      end
+
+  end
+  if defined?(MyWorkaroundInstallerUntilPR373IsMerged)
+    config.vbguest.installer = MyWorkaroundInstallerUntilPR373IsMerged
+  end 
+end
+
