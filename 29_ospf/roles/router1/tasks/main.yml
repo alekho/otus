@@ -1,0 +1,59 @@
+---
+# tasks file for router1
+
+- name: "net.ipv4.ip_forward"
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: "1"
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: "net.ipv4.conf.all.rp_filter"
+  sysctl:
+    name: net.ipv4.conf.all.rp_filter
+    value: "2"
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: "Install epel repo"
+  yum:
+    name: "epel-release"
+    state: present
+  tags:
+    - repo
+
+- name: "Router1 packages install"
+  yum:
+    update_cache: yes
+    name:
+    - mtr
+    state: present
+
+- name: "Copy script"
+  copy:
+    src:  files/frr_install.sh
+    dest: /root/frr_install.sh
+
+  
+- name: "FRR install"
+  shell: sh frr_install.sh
+
+- name: "Copy ospfd.conf"
+  copy:
+    src:  files/ospfd.conf
+    dest: /etc/frr/ospfd.conf
+
+- name: "Enable OSPF"
+  replace:
+    path: /etc/frr/daemons
+    regexp: '^ospfd=no'
+    replace: "ospfd=yes"
+
+- name: "Start frr"
+  systemd:
+    name: frr
+    enabled: true
+    state: restarted
+    

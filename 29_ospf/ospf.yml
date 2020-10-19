@@ -1,0 +1,15 @@
+--- 
+  - hosts: router1
+    become: true
+    roles:
+    - router1
+
+  - hosts: router2
+    become: true  
+    roles:
+    - router2
+    
+  - hosts: router3
+    become: true      
+    roles:
+    - router3
