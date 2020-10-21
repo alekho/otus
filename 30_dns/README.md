@@ -17,10 +17,9 @@ A Bind's DNS lab with Vagrant and Ansible, based on CentOS 7.
     * used to test the env, runs rndc and nsupdate
   * zone transfer: TSIG key
 
-Итак по порядку. Selinux. По докам достаточно раскидать но нужным директориям:
+Итак по порядку. Selinux. В провиженге надо для slave добавить путь:
 ```bash
- - /var/named/ для master;
- - /var/named/slaves/ для slave
+file "slaves/named.что-то там..
 ```
 Дальше два дня убил на то, чтобы понять какого не идет репликация... Пересмотрел лекцию, и наконец-то услышал важное, он сказал, что нужно 2 ключа ))) Делал на виртуалке, потому как на хостовой Ubunte не работатает команда из лекции.
 
