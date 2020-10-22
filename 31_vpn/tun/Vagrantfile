@@ -1,0 +1,57 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+MACHINES = {
+  :server => {
+        :box_name => "centos/7",
+        :net => [
+                   {ip: '192.168.10.10', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "vpn"},
+                ],
+        :path => 'server.sh'        
+  },
+  :client => {
+        :box_name => "centos/7",
+        :net => [
+                   {ip: '192.168.10.20', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "vpn"},
+                ],
+        :path => 'client.sh'        
+  },
+  
+}
+
+Vagrant.configure("2") do |config|
+
+  MACHINES.each do |boxname, boxconfig|
+
+    config.vm.define boxname do |box|
+
+        box.vm.box = boxconfig[:box_name]
+        box.vm.host_name = boxname.to_s
+
+        boxconfig[:net].each do |ipconf|
+          box.vm.network "private_network", ipconf
+        end
+        
+        if boxconfig.key?(:public)
+          box.vm.network "public_network", boxconfig[:public]
+        end
+
+        box.vm.provision "shell", inline: <<-SHELL
+          mkdir -p ~root/.ssh
+                cp ~vagrant/.ssh/auth* ~root/.ssh 
+                sed -i '65s/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+                systemctl restart sshd
+                systemctl restart network
+                sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+                setenforce 0
+                yum install -y epel-release
+                yum install -y openvpn iperf3
+                yum install -y sshpass 
+        SHELL
+        
+        box.vm.provision  "shell", path: boxconfig[:path]
+        
+        
+      end
+
+  end
+end
