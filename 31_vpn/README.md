@@ -178,13 +178,13 @@ iperf Done.
 
 ### RAS
 С режимом RAS все немного сложнее, на хостовой машине выполняем следующие команды (пароль: vagrant):
-<code>
+```console
 ssh-keyscan -H 192.168.10.10 >> ~/.ssh/known_hosts
 scp root@192.168.10.10:/etc/openvpn/pki/ca.crt ./
 scp root@192.168.10.10:/etc/openvpn/pki/issued/client.crt ./
 scp root@192.168.10.10:/etc/openvpn/pki/private/client.key ./
 sudo openvpn  --config client.conf
-</code>
+```
 
 Теперь проверяем:
 ```console
