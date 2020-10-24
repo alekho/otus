@@ -54,21 +54,21 @@
 
 [Задание №31: Мосты, туннели и VPN ](31_vpn) :heavy_check_mark:
 
-[Задание №32: LDAP. Централизованная авторизация и аутентификация ](32_ldap) :clock4:
+[Задание №32: LDAP. Централизованная авторизация и аутентификация ](32_ldap) :heavy_check_mark:
 
 [Задание №33: BGP](33_bgp) :heavy_check_mark:
 
 [Задание №34: Сетевые пакеты. VLAN'ы. LACP](34_vlan_lacp) :clock4:
 
-[Задание №35: Фильтрация трафика - nftables](35_nftables) :clock4:
+[Задание №35: Фильтрация трафика - nftables](35_nftables) :heavy_check_mark:
 
-[Задание №36: Веб сервера: nginx, apache](36_web_servers) :clock4:
+[Задание №36: Веб сервера: nginx, apache](36_web_servers) :heavy_check_mark:
 
-[Задание №37: NGINX](37_nginx) :clock4:
+[Задание №37: NGINX](37_nginx) :heavy_check_mark:
 
 [Задание №38: Динамический веб](38_dynamic_web) :clock4:
 
-[Задание №39: Почта: SMTP, IMAP, POP3](39_post) :clock4:
+[Задание №39: Почта: SMTP, IMAP, POP3](39_post) :heavy_check_mark:
 
 [Задание №40: MySQL](40_mysql) :clock4:
 
