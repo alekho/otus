@@ -58,7 +58,7 @@
 
 [Задание №33: BGP](33_bgp) :heavy_check_mark:
 
-[Задание №34: Сетевые пакеты. VLAN'ы. LACP](34_vlan_lacp) :clock4:
+[Задание №34: Сетевые пакеты. VLAN'ы. LACP](34_vlan_lacp) :heavy_check_mark:
 
 [Задание №35: Фильтрация трафика - nftables](35_nftables) :heavy_check_mark:
 
