@@ -1,0 +1,34 @@
+---
+
+- hosts: testServer1
+  become: true
+  roles:
+  - testServer1
+    
+    
+- hosts: testClient1
+  become: true
+  roles:
+  - testClient1
+    
+    
+- hosts: testServer2
+  become: true
+  roles:
+  - testServer2
+    
+- hosts: testClient2
+  become: true
+  roles:
+  - testClient2
+    
+    
+- hosts: centralRouter
+  become: true
+  roles:
+  - centralRouter
+    
+- hosts: inetRouter
+  become: true
+  roles:
+  - inetRouter

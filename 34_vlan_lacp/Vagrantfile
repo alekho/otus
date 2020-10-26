@@ -1,0 +1,56 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+  config.vm.box = "centos/7"
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "lcap.yml"
+    ansible.become = "true"
+  end
+  config.vm.provider "virtualbox" do |v|
+    v.memory = "256"
+    v.cpus = 1
+  end
+
+
+
+  config.vm.define "centralRouter" do |centralRouter|
+    centralRouter.vm.network "private_network", ip: "10.10.10.2", netmask: "255.255.255.0", virtualbox__intnet: "test"
+    centralRouter.vm.network "private_network", auto_config: false, virtualbox__intnet: "slave"
+    centralRouter.vm.network "private_network", auto_config: false, virtualbox__intnet: "slave"
+    centralRouter.vm.hostname = "centralRouter"
+  end
+
+  config.vm.define "inetRouter" do |inetRouter|
+    inetRouter.vm.network "private_network", auto_config: false, virtualbox__intnet: "slave"
+    inetRouter.vm.network "private_network", auto_config: false, virtualbox__intnet: "slave"
+    inetRouter.vm.hostname = "inetRouter"
+  end
+
+  config.vm.define "testClient1" do |testClient1|
+    testClient1.vm.network "private_network", auto_config: false,  virtualbox__intnet: "vlan100"
+    testClient1.vm.hostname = "testClient1"
+  end
+
+
+  config.vm.define "testClient2" do |testClient2|
+    testClient2.vm.network "private_network", auto_config: false,  virtualbox__intnet: "vlan101"
+    testClient2.vm.hostname = "testClient2"
+  end
+
+  config.vm.define "testServer1" do |testServer1|
+    testServer1.vm.network "private_network", auto_config: false, virtualbox__intnet: "vlan100"
+    testServer1.vm.hostname = "testServer1"
+  end
+
+  config.vm.define "testServer2" do |testServer2|
+    testServer2.vm.network "private_network", auto_config: false,  virtualbox__intnet: "vlan101"
+    testServer2.vm.hostname = "testServer2"
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    mkdir -p ~root/.ssh
+    cp ~vagrant/.ssh/auth* ~root/.ssh
+    SHELL
+  
+end
