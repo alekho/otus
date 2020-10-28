@@ -1,0 +1,61 @@
+---
+- name: Install percona repository
+  yum: 
+    name: "https://repo.percona.com/yum/percona-release-latest.noarch.rpm"
+    state: present
+      
+- name: Install percona server
+  yum: 
+    name: 
+      - Percona-Server-server-57
+      - MySQL-python
+    state: present
+      
+- name: Copy config                                                                                                                              
+  copy:                                                                                                                                                        
+    src: files/conf.d/                                                                                                                                          
+    dest: /etc/my.cnf.d/                                                                                                                                       
+    owner: root                                                                                                                                                
+    group: root                                                                                                                                                
+    mode: '0644'
+    
+- name: restart mysql
+  service:
+    name: mysql
+    state: restarted
+    enabled: yes
+  
+  
+- name: Set temp mysql password
+  shell: grep 'A temporary password is generated' /var/log/mysqld.log | awk '{print $11}' | head -1
+  register: temp_password
+  
+- name: Change mysql password
+  shell:
+    mysql --connect-expired-password -uroot -p'{{ temp_password.stdout }}' -e 'ALTER USER USER() IDENTIFIED BY "!OtusPa$$w0rd"'
+      
+- name: Create a bet DB
+  mysql_db:
+    login_user: root
+    login_password: "!OtusPa$$w0rd"
+    name: bet
+    state: present
+  
+- name: Import bet database
+  mysql_db:
+    login_user: root
+    login_password: "!OtusPa$$w0rd"
+    name: bet
+    state: import
+    target: /vagrant/bet.dmp
+  
+- name: Create database user with all database privileges
+  mysql_user:
+    login_user: root
+    login_password: "!OtusPa$$w0rd"
+    name: "repl"
+    password: "!OtusLinux2020"
+    host: '%'
+    priv: '*.*:ALL'
+    state: present
+  

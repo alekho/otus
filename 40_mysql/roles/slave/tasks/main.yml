@@ -1,0 +1,50 @@
+---
+
+- name: Install percona repository
+  yum: 
+    name: "https://repo.percona.com/yum/percona-release-latest.noarch.rpm"
+    state: present
+      
+- name: Install percona-server
+  yum: 
+    name: 
+      - Percona-Server-server-57
+    state: present
+      
+- name: "Copy config"                                                                                                                              
+  copy:                                                                                                                                                        
+    src: files/conf.d/                                                                                                                                          
+    dest: /etc/my.cnf.d/                                                                                                                                       
+    owner: root                                                                                                                                                
+    group: root                                                                                                                                                
+    mode: '0644'
+    
+- name: restart mysql
+  service:
+    name: mysql
+    state: restarted
+    enabled: yes
+  
+- name: Set temp mysql password
+  shell: grep 'A temporary password is generated' /var/log/mysqld.log | awk '{print $11}' | head -1
+  register: temp_password
+  
+- name: Change mysql password
+  shell: 
+    mysql --connect-expired-password -uroot -p'{{ temp_password.stdout }}' -e 'ALTER USER USER() IDENTIFIED BY "!OtusPa$$w0rd"'
+  
+  
+- name: Setup and run slave
+  shell: |
+    mysql \
+      -uroot \
+      -p'!OtusPa$$w0rd' \
+      -e 'CHANGE MASTER TO \
+      MASTER_HOST="192.168.11.150", \
+      MASTER_USER="repl", \
+      MASTER_PASSWORD="!OtusLinux2020", \
+      MASTER_AUTO_POSITION=1;'
+    mysql \
+      -uroot \
+      -p'!OtusPa$$w0rd' \
+      -e 'START SLAVE;'
