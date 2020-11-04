@@ -1,0 +1,14 @@
+pgsql:
+  hosts:
+    master:
+      ansible_host: 127.0.0.1 
+      ansible_port: 2222  
+      ansible_private_key_file: .vagrant/machines/master/virtualbox/private_key
+    slave:
+      ansible_host: 127.0.0.1 
+      ansible_port: 2200  
+      ansible_private_key_file: .vagrant/machines/slave/virtualbox/private_key
+    barman:
+      ansible_host: 127.0.0.1 
+      ansible_port: 2201  
+      ansible_private_key_file: .vagrant/machines/barman/virtualbox/private_key

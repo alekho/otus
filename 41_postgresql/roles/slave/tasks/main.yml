@@ -1,0 +1,93 @@
+---
+- name: Create a directory .ssh
+  file:
+    path: /root/.ssh
+    state: directory
+    mode: '0700'
+
+- name: Copy id_rsa ans authorized_keys
+  copy:
+    src: files/ssh/
+    dest: /root/.ssh/
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: restart sshd
+  systemd:
+    name: sshd
+    state: restarted
+  
+- name: Add master to hosts
+  lineinfile:
+    path: /etc/hosts
+    state: present
+    line: '192.168.100.10  master'
+  
+- name: Add barman to hosts
+  lineinfile:
+    path: /etc/hosts
+    state: present
+    line: '192.168.100.30  barman'
+  
+- name: Add repo postgresql
+  yum:
+    name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+    state: present      
+        
+- name: Add multiple repositories 
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    file: external_repos
+    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+    gpgcheck: no
+  
+- name: Install epel-release
+  yum:
+    name:
+    - epel-release
+    state: latest
+  
+- name: install package
+  yum:
+    name:
+      - postgresql11-server
+      - postgresql11-contrib
+      - barman-cli
+        
+- name: Init database
+  command: /usr/pgsql-11/bin/postgresql-11-setup initdb
+  args:
+    creates: "{{ pg_data }}/postgresql.conf"
+                  
+- name: Remove pgdata
+  file:
+    path: /var/lib/pgsql/11/data
+    state: absent
+  
+- name: Create DB pgdata
+  file:
+    path: /var/lib/pgsql/11/data
+    state: directory
+    owner: postgres
+    group: postgres
+    mode: '0700'
+  
+- name: Sync DB
+  command: pg_basebackup -X stream -h {{ master_ip }} -D /var/lib/pgsql/11/data/ -P -U repl
+  become: yes
+  become_user: postgres
+  
+- name: Create recovery.conf
+  template:
+    src: recovery.conf.j2
+    dest: /var/lib/pgsql/11/data/recovery.conf
+    owner: postgres
+    group: postgres
+    mode: '0600'
+  
+- name: Restart PostgreSQL
+  systemd:
+    name: postgresql-11
+    state: restarted

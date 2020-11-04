@@ -1,0 +1,97 @@
+---
+
+- name: Create a directory .ssh
+  file:
+    path: /root/.ssh
+    state: directory
+    mode: '0700'
+  
+- name: Copy id_rsa and authorized_keys
+  copy:
+    src: files/ssh/
+    dest: /root/.ssh/
+    owner: root
+    group: root
+    mode: '0600'
+  
+- name: Restart sshd
+  systemd: 
+    name: sshd
+    state: restarted
+  
+- name: Add master to hosts
+  lineinfile:
+    path: /etc/hosts
+    state: present
+    line: '192.168.100.10  master'
+  
+- name: Add slave to hosts
+  lineinfile:
+    path: /etc/hosts
+    state: present
+    line: '192.168.10.20  slave'
+  
+- name: Add repo postgresql
+  yum:
+    name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+    state: present      
+        
+- name: Add multiple repositories 
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    file: external_repos
+    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+    gpgcheck: no
+  
+- name: Install epel-release
+  yum:
+    name:
+      - epel-release
+    state: latest
+
+- name: Install package
+  yum:
+    name:
+      - barman
+      - barman-cli
+      - postgresql11
+  
+- name: Create .pgpass
+  template:
+    src: .pgpass.j2
+    dest: /var/lib/barman/.pgpass
+    mode: 0600
+    owner: barman
+    group: barman
+  
+- name: Create barman.conf
+  template:
+    src: barman.conf.j2
+    dest: /etc/barman.conf
+    mode: 0644
+  
+- name: Create master.conf
+  template:
+    src: master.conf.j2
+    dest: /etc/barman.d/master.conf
+    mode: 0644
+  
+- name: Create slot
+  ignore_errors: yes
+  shell: barman receive-wal --create-slot {{ master_hostname }}
+  
+- name:  Start barman cron
+  ignore_errors: yes
+  shell: barman cron
+  
+- name:  Start barman switch-wal
+  ignore_errors: yes
+  shell: barman switch-wal --force {{ master_hostname }}
+  
+- name: Create wals directory
+  file:
+    path: "{{ backup_dir }}"
+    state: directory
+    owner: barman
+    group: barman

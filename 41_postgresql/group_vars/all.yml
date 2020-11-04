@@ -1,0 +1,19 @@
+---
+
+master_ip: 192.168.100.10
+master_hostname: master
+slave_ip: 192.168.100.20
+slave_hostname: slave
+barman_ip: 192.168.100.30
+allow_subnet: 192.168.100.0
+barman_hostname: barman
+max_wal_senders: 3
+repl_user: repl
+repl_password: Otus2020
+barman_user: barman
+barman_password: Otus2020
+repl_slot: slot
+barman_slot: barman
+pg_data: /var/lib/pgsql/11/data/
+base: pgdb
+backup_dir: /backups 

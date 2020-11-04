@@ -72,4 +72,4 @@
 
 [Задание №40: MySQL](40_mysql) :heavy_check_mark:
 
-[Задание №41: PostgreSQL](41_postgresql) :clock4:
+[Задание №41: PostgreSQL](41_postgresql) :heavy_check_mark:

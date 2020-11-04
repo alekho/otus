@@ -1,0 +1,17 @@
+---
+
+- hosts: master
+  become: true
+  roles:
+  - master
+        
+        
+- hosts: slave
+  become: true
+  roles:
+  - slave
+
+- hosts: barman
+  become: true
+  roles:
+  - barman

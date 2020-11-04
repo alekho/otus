@@ -1,0 +1,16 @@
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+
+# "local" is for Unix domain socket connections only
+local   all             all                                     peer
+# IPv4 local connections:
+host    all             all             127.0.0.1/32            ident
+# IPv6 local connections:
+host    all             all             {{ allow_subnet }}/24          md5
+# Allow replication connections from localhost, by a user with the
+# replication privilege.
+local   replication     all                                     peer
+host    replication     all             127.0.0.1/32            ident
+host    replication     all             ::1/128                 ident
+host    replication     {{ repl_user }}            {{ allow_subnet }}/24     trust
+host    replication     {{ barman_user }}          {{ barman_ip }}/32        md5
+host    all             {{ barman_user }}          {{ barman_ip }}/32        md5

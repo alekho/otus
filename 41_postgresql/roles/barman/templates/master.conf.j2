@@ -1,0 +1,10 @@
+[master]
+description =  "Master backup"
+conninfo = host={{ master_hostname }} user={{ barman_user }} dbname={{ base }}
+streaming_conninfo = host={{ master_hostname }} user={{ barman_user }} 
+backup_method = postgres
+streaming_archiver = on
+slot_name = {{ barman_slot }}
+streaming_conninfo = host={{ master_hostname }} user={{ barman_user }} dbname={{ base }}
+incoming_wals_directory=/backups/barman_backups/pgdb/incoming
+archiver=on

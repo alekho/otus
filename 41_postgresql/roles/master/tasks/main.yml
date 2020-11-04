@@ -1,0 +1,108 @@
+---
+
+- name: Create a directory .ssh
+  file:
+    path: /root/.ssh
+    state: directory
+    mode: '0700'
+
+- name: Copy id_rsa ans authorized_keys
+  copy:
+    src: files/ssh/
+    dest: /root/.ssh/
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: restart sshd
+  systemd:
+    name: sshd
+    state: restarted
+
+- name: Add slave to hosts
+  lineinfile:
+    path: /etc/hosts
+    state: present
+    line: '192.168.100.20  slave'
+
+- name: Add barman to hosts
+  lineinfile:
+    path: /etc/hosts
+    state: present
+    line: '192.168.100.30  barman'
+
+- name: Add repo postgresql
+  yum:
+    name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+    state: present      
+      
+- name: Add repo mamonsu
+  yum:
+    name: https://repo.postgrespro.ru/mamonsu/keys/centos.rpm
+    state: present      
+      
+- name: Add multiple repositories 
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    file: external_repos
+    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+    gpgcheck: no
+
+- name: Install epel-release
+  yum:
+    name:
+    - epel-release
+    state: latest
+
+
+- name: install package
+  yum:
+    name:
+      - postgresql11-server
+      - postgresql11-contrib
+      - postgresql11
+      - mamonsu
+      - barman-cli
+
+- name: DB init
+  shell: /usr/pgsql-11/bin/postgresql-11-setup initdb
+  ignore_errors: yes
+      
+- name: Config postgresql.conf
+  template:
+    src: postgresql.conf.j2
+    dest: /var/lib/pgsql/11/data/postgresql.conf
+    owner: postgres
+    group: postgres
+    mode: '0600'
+
+- name: Config pg_hba.conf
+  template:
+    src: pg_hba.conf.j2
+    dest: /var/lib/pgsql/11/data/pg_hba.conf
+    owner: postgres
+    group: postgres
+    mode: '0600'
+
+- name: Restart postgres
+  systemd:
+    name: postgresql-11
+    state: restarted
+    enabled: yes
+
+- name: Create user replication
+  become_user: postgres
+  command: psql postgres -c "CREATE USER {{ repl_user }} WITH REPLICATION PASSWORD '{{ repl_password }}'"
+
+- name: Create slot
+  become_user: postgres
+  command: psql postgres -c "SELECT * FROM pg_create_physical_replication_slot('{{ repl_slot }}');"
+
+- name: Create user barman
+  become_user: postgres
+  command: psql postgres -c "CREATE USER {{ barman_user }} WITH REPLICATION PASSWORD '{{ barman_password }}' ; alter role barman superuser ; "
+  
+- name: Create DB
+  become_user: postgres
+  command: psql postgres -c "CREATE DATABASE {{ base }} ; "
