@@ -1,0 +1,89 @@
+version: '3.7'
+
+services:
+  golang:
+    container_name: golang
+    build: ./go
+    networks:
+      - network
+
+  django:
+    container_name: django
+    build: ./django
+    command: python manage.py runserver 0.0.0.0:8001
+    volumes:
+      - ./django/:/usr/src/app/
+#    ports:
+#      - 8001:8001
+    env_file:
+      - ./.env
+    depends_on:
+      - postgres_db
+    networks:
+      - network
+  
+  postgres_db:
+    image: postgres
+    container_name: postgres_db
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - network
+  
+  wordpress:
+    depends_on:
+      - mysql_db
+    image: wordpress:5.1.1-fpm-alpine
+    container_name: wordpress
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - WORDPRESS_DB_HOST=mysql_db:3306
+      - WORDPRESS_DB_USER=$MYSQL_USER
+      - WORDPRESS_DB_PASSWORD=$MYSQL_PASSWORD
+      - WORDPRESS_DB_NAME=wordpress
+    volumes:
+      - ./wordpress:/var/www/html
+    networks:
+      - network
+  
+  mysql_db:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MYSQL_DATABASE=wordpress
+    volumes:
+      - dbdata:/var/lib/mysql
+    command: '--default-authentication-plugin=mysql_native_password'
+    networks:
+      - network
+
+  nginx:
+    depends_on:
+      - wordpress
+    image: nginx:1.15.12-alpine
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "8000:8000"
+      - "8008:8008"
+    volumes:
+      - ./wordpress:/var/www/html
+      - ./nginx-conf/conf.d:/etc/nginx/conf.d
+      - ./nginx-conf/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - network
+
+volumes:
+  dbdata: {}
+  postgres_data: {}
+
+networks: 
+  network:

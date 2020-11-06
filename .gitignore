@@ -2,3 +2,4 @@
 *.vdi
 *.box
 packer_cache/
+wordpress/
