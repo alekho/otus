@@ -66,7 +66,7 @@
 
 [Задание №37: NGINX](37_nginx) :heavy_check_mark:
 
-[Задание №38: Динамический веб](38_dynamic_web) :clock4:
+[Задание №38: Динамический веб](38_dynamic_web) :heavy_check_mark:
 
 [Задание №39: Почта: SMTP, IMAP, POP3](39_post) :heavy_check_mark:
 
