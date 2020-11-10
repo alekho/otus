@@ -1,75 +1,41 @@
 # Administrator Linux. Professional
 
-[Задание №1: С чего начинается Linux](01_start_linux) :heavy_check_mark:
+Решение лабораторных работ курса Administrator Linux. Professional 2020
 
-[Задание №2: Дисковая подсистема](02_disk_subsystem) :heavy_check_mark:
-
-[Задание №3: LVM и файловые системы ](03_filesystem_lvm) :heavy_check_mark:
-
-[Задание №4: ZFS ](04_zfs) :heavy_check_mark:
-
-[Задание №5: NFS ](05_nfs_fuse) :heavy_check_mark:
-
-[Задание №6: Boot ](06_boot) :heavy_check_mark:
-
-[Задание №7: Systemd ](07_systemd) :heavy_check_mark:
-
-[Задание №8-9: Bash, grep, awk, sed ](08_09_bash) :heavy_check_mark:
-
-[Задание №10: Packages](10_packages) :heavy_check_mark:
-
-[Задание №11: Processes](11_processes) :heavy_check_mark:
-
-[Задание №12: Memory](12_memory) :heavy_check_mark:
-
-[Задание №13: Namespaces_cgroups](13_namespaces_cgroups) :heavy_check_mark:
-
-[Задание №14-15: Ansible](14_ansible) :heavy_check_mark:
-
-[Задание №16: PAM и AAA](16_pam_aaa) :heavy_check_mark:
-
-[Задание №17: Selinux](17_selinux) :heavy_check_mark:
-
-[Задание №18-19: Docker](18_19_docker) :heavy_check_mark:
-
-[Задание №20: Мониторинг производительности](20_monitor) :heavy_check_mark:
-
-[Задание №21: Мониторинг и алертинг ](21_alert) :heavy_check_mark:
-
-[Задание №22-23: Сбор и анализ логов](22_23_logs) :heavy_check_mark:
-
-[Задание №24: Резервное копирование ](24_backup) :heavy_check_mark:
-
-[Задание №25: Архитектура сетей ](25_network) :heavy_check_mark:
-
-[Задание №26: DHCP, PXE ](26_dhcp_pxe) :heavy_check_mark:
-
-[Задание №27: IPv6](27_ipv6) :heavy_check_mark:
-
-[Задание №28: Фильтрация трафика - firewalld, iptables ](28_firewalld_iptables) :heavy_check_mark:
-
-[Задание №29: Статическая и динамическая маршрутизация, OSPF ](29_ospf) :heavy_check_mark:
-
-[Задание №30: DNS- настройка и обслуживание ](30_dns) :heavy_check_mark:
-
-[Задание №31: Мосты, туннели и VPN ](31_vpn) :heavy_check_mark:
-
-[Задание №32: LDAP. Централизованная авторизация и аутентификация ](32_ldap) :heavy_check_mark:
-
-[Задание №33: BGP](33_bgp) :heavy_check_mark:
-
-[Задание №34: Сетевые пакеты. VLAN'ы. LACP](34_vlan_lacp) :heavy_check_mark:
-
-[Задание №35: Фильтрация трафика - nftables](35_nftables) :heavy_check_mark:
-
-[Задание №36: Веб сервера: nginx, apache](36_web_servers) :heavy_check_mark:
-
-[Задание №37: NGINX](37_nginx) :heavy_check_mark:
-
-[Задание №38: Динамический веб](38_dynamic_web) :heavy_check_mark:
-
-[Задание №39: Почта: SMTP, IMAP, POP3](39_post) :heavy_check_mark:
-
-[Задание №40: MySQL](40_mysql) :heavy_check_mark:
-
-[Задание №41: PostgreSQL](41_postgresql) :heavy_check_mark:
+- [x] [Задание №1: С чего начинается Linux](hometasks/01_start_linux)
+- [x] [Задание №2: Дисковая подсистема](hometasks/02_disk_subsystem)
+- [x] [Задание №3: LVM и файловые системы ](hometasks/03_filesystem_lvm)
+- [x] [Задание №4: ZFS ](hometasks/04_zfs)
+- [x] [Задание №5: NFS ](hometasks/05_nfs_fuse)
+- [x] [Задание №6: Boot ](hometasks/06_boot)
+- [x] [Задание №7: Systemd ](hometasks/07_systemd)
+- [x] [Задание №8-9: Bash, grep, awk, sed ](hometasks/08_09_bash)
+- [x] [Задание №10: Packages](hometasks/10_packages)
+- [x] [Задание №11: Processes](hometasks/11_processes)
+- [x] [Задание №12: Memory](hometasks/12_memory)
+- [x] [Задание №13: Namespaces_cgroups](hometasks/13_namespaces_cgroups)
+- [x] [Задание №14-15: Ansible](hometasks/14_ansible)
+- [x] [Задание №16: PAM и AAA](hometasks/16_pam_aaa)
+- [x] [Задание №17: Selinux](hometasks/17_selinux)
+- [x] [Задание №18-19: Docker](hometasks/18_19_docker)
+- [x] [Задание №20: Мониторинг производительности](hometasks/20_monitor)
+- [x] [Задание №21: Мониторинг и алертинг ](hometasks/21_alert)
+- [x] [Задание №22-23: Сбор и анализ логов](hometasks/22_23_logs)
+- [x] [Задание №24: Резервное копирование ](hometasks/24_backup)
+- [x] [Задание №25: Архитектура сетей ](hometasks/25_network)
+- [x] [Задание №26: DHCP, PXE ](hometasks/26_dhcp_pxe)
+- [x] [Задание №27: IPv6](hometasks/27_ipv6)
+- [x] [Задание №28: Фильтрация трафика - firewalld, iptables ](hometasks/28_firewalld_iptables)
+- [x] [Задание №29: Статическая и динамическая маршрутизация, OSPF ](hometasks/29_ospf)
+- [x] [Задание №30: DNS- настройка и обслуживание ](hometasks/30_dns)
+- [x] [Задание №31: Мосты, туннели и VPN ](hometasks/31_vpn)
+- [x] [Задание №32: LDAP. Централизованная авторизация и аутентификация ](hometasks/32_ldap)
+- [x] [Задание №33: BGP](hometasks/33_bgp)
+- [x] [Задание №34: Сетевые пакеты. VLAN'ы. LACP](hometasks/34_vlan_lacp)
+- [x] [Задание №35: Фильтрация трафика - nftables](hometasks/35_nftables)
+- [x] [Задание №36: Веб сервера: nginx, apache](hometasks/36_web_servers)
+- [x] [Задание №37: NGINX](hometasks/37_nginx)
+- [x] [Задание №38: Динамический веб](hometasks/38_dynamic_web)
+- [x] [Задание №39: Почта: SMTP, IMAP, POP3](hometasks/39_post)
+- [x] [Задание №40: MySQL](hometasks/40_mysql)
+- [x] [Задание №41: PostgreSQL](hometasks/41_postgresql)
