@@ -1,4 +1,4 @@
-# OTUS Linux Administrator
+# Administrator Linux. Professional
 
 [Задание №1: С чего начинается Linux](01_start_linux) :heavy_check_mark:
 
